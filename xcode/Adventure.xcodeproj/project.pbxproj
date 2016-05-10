@@ -16,12 +16,15 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
-		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		B0E4FDB9BA534174A1A16B0E /* Adventure_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 6A6E583FADB74BA8A49B339B /* Adventure_Prefix.pch */; };
 		08307A54F2F0433AA5638706 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8EA6104A66774585AACC7046 /* CinderApp.icns */; };
-		1DDE7E2C6FE84E2CBBACE673 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = DC761A9694984D4E90DF483B /* Resources.h */; };
 		27E422705FAA4C9B8AA5183B /* AdventureApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EDFB0BF663C5426FA3C453CC /* AdventureApp.cpp */; };
+		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
+		80241EC51CD8C4E60055B94F /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80241EC31CD8C4E60055B94F /* Renderer.cpp */; };
+		80574F191CDC53810017188A /* Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80574F171CDC53810017188A /* Event.cpp */; };
+		80574F1C1CDC552B0017188A /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80574F1A1CDC552B0017188A /* GameObject.cpp */; };
+		808F26B01CDA340000FE440C /* PathFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808F26AF1CDA340000FE440C /* PathFinder.cpp */; };
+		808F26B51CDA362F00FE440C /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808F26B31CDA362F00FE440C /* Math.cpp */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,13 +40,22 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		2A123CDF2CD145E6861951DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		6A6E583FADB74BA8A49B339B /* Adventure_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Adventure_Prefix.pch; sourceTree = "<group>"; };
+		80241EC31CD8C4E60055B94F /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = ../src/Renderer.cpp; sourceTree = "<group>"; };
+		80241EC41CD8C4E60055B94F /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = ../src/Renderer.hpp; sourceTree = "<group>"; };
+		80574F171CDC53810017188A /* Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Event.cpp; path = ../src/Event.cpp; sourceTree = "<group>"; };
+		80574F181CDC53810017188A /* Event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Event.hpp; path = ../src/Event.hpp; sourceTree = "<group>"; };
+		80574F1A1CDC552B0017188A /* GameObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameObject.cpp; path = ../src/GameObject.cpp; sourceTree = "<group>"; };
+		80574F1B1CDC552B0017188A /* GameObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GameObject.hpp; path = ../src/GameObject.hpp; sourceTree = "<group>"; };
+		808F26AF1CDA340000FE440C /* PathFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PathFinder.cpp; path = ../src/PathFinder.cpp; sourceTree = "<group>"; };
+		808F26B31CDA362F00FE440C /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = ../src/Math.cpp; sourceTree = "<group>"; };
+		808F26B41CDA362F00FE440C /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Math.hpp; path = ../src/Math.hpp; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Adventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Adventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EDFB0BF663C5426FA3C453CC /* AdventureApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/AdventureApp.cpp; sourceTree = "<group>"; name = AdventureApp.cpp; };
-		DC761A9694984D4E90DF483B /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		8EA6104A66774585AACC7046 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		2A123CDF2CD145E6861951DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		6A6E583FADB74BA8A49B339B /* Adventure_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = Adventure_Prefix.pch; sourceTree = "<group>"; name = Adventure_Prefix.pch; };
+		8EA6104A66774585AACC7046 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		DC761A9694984D4E90DF483B /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		EDFB0BF663C5426FA3C453CC /* AdventureApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = AdventureApp.cpp; path = ../src/AdventureApp.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,10 +80,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01B97315FEAEA392516A2CEA /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Blocks;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				80241EC31CD8C4E60055B94F /* Renderer.cpp */,
+				80241EC41CD8C4E60055B94F /* Renderer.hpp */,
 				EDFB0BF663C5426FA3C453CC /* AdventureApp.cpp */,
+				80574F1A1CDC552B0017188A /* GameObject.cpp */,
+				80574F1B1CDC552B0017188A /* GameObject.hpp */,
+				80574F171CDC53810017188A /* Event.cpp */,
+				80574F181CDC53810017188A /* Event.hpp */,
+				808F26AF1CDA340000FE440C /* PathFinder.cpp */,
+				808F26B31CDA362F00FE440C /* Math.cpp */,
+				808F26B41CDA362F00FE440C /* Math.hpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -122,13 +150,6 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = Adventure;
-			sourceTree = "<group>";
-		};
-		01B97315FEAEA392516A2CEA /* Blocks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Blocks;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
@@ -184,6 +205,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Adventure" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -220,6 +243,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				27E422705FAA4C9B8AA5183B /* AdventureApp.cpp in Sources */,
+				808F26B01CDA340000FE440C /* PathFinder.cpp in Sources */,
+				80574F1C1CDC552B0017188A /* GameObject.cpp in Sources */,
+				80574F191CDC53810017188A /* Event.cpp in Sources */,
+				80241EC51CD8C4E60055B94F /* Renderer.cpp in Sources */,
+				808F26B51CDA362F00FE440C /* Math.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,17 +258,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Adventure_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Adventure_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -262,12 +290,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Adventure_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Adventure_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -284,7 +312,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../../../Applications/Cinder";
+				CINDER_PATH = ../../../../../../Applications/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				ENABLE_TESTABILITY = YES;
@@ -302,7 +330,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../../../Applications/Cinder";
+				CINDER_PATH = ../../../../../../Applications/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
