@@ -22,7 +22,8 @@
 		80241EC51CD8C4E60055B94F /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80241EC31CD8C4E60055B94F /* Renderer.cpp */; };
 		80574F191CDC53810017188A /* Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80574F171CDC53810017188A /* Event.cpp */; };
 		80574F1C1CDC552B0017188A /* GameObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80574F1A1CDC552B0017188A /* GameObject.cpp */; };
-		808F26B01CDA340000FE440C /* PathFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808F26AF1CDA340000FE440C /* PathFinder.cpp */; };
+		80853D551CF4D01200D68651 /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 80853D531CF4D01200D68651 /* System.cpp */; };
+		808F26B01CDA340000FE440C /* NavMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808F26AF1CDA340000FE440C /* NavMesh.cpp */; };
 		808F26B51CDA362F00FE440C /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 808F26B31CDA362F00FE440C /* Math.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
@@ -49,7 +50,9 @@
 		80574F181CDC53810017188A /* Event.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Event.hpp; path = ../src/Event.hpp; sourceTree = "<group>"; };
 		80574F1A1CDC552B0017188A /* GameObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameObject.cpp; path = ../src/GameObject.cpp; sourceTree = "<group>"; };
 		80574F1B1CDC552B0017188A /* GameObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GameObject.hpp; path = ../src/GameObject.hpp; sourceTree = "<group>"; };
-		808F26AF1CDA340000FE440C /* PathFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PathFinder.cpp; path = ../src/PathFinder.cpp; sourceTree = "<group>"; };
+		80853D531CF4D01200D68651 /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = System.cpp; path = ../src/System.cpp; sourceTree = "<group>"; };
+		80853D541CF4D01200D68651 /* System.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = System.hpp; path = ../src/System.hpp; sourceTree = "<group>"; };
+		808F26AF1CDA340000FE440C /* NavMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NavMesh.cpp; path = ../src/NavMesh.cpp; sourceTree = "<group>"; };
 		808F26B31CDA362F00FE440C /* Math.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Math.cpp; path = ../src/Math.cpp; sourceTree = "<group>"; };
 		808F26B41CDA362F00FE440C /* Math.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Math.hpp; path = ../src/Math.hpp; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Adventure.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Adventure.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,7 +100,9 @@
 				80574F1B1CDC552B0017188A /* GameObject.hpp */,
 				80574F171CDC53810017188A /* Event.cpp */,
 				80574F181CDC53810017188A /* Event.hpp */,
-				808F26AF1CDA340000FE440C /* PathFinder.cpp */,
+				808F26AF1CDA340000FE440C /* NavMesh.cpp */,
+				80853D531CF4D01200D68651 /* System.cpp */,
+				80853D541CF4D01200D68651 /* System.hpp */,
 				808F26B31CDA362F00FE440C /* Math.cpp */,
 				808F26B41CDA362F00FE440C /* Math.hpp */,
 			);
@@ -242,8 +247,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80853D551CF4D01200D68651 /* System.cpp in Sources */,
 				27E422705FAA4C9B8AA5183B /* AdventureApp.cpp in Sources */,
-				808F26B01CDA340000FE440C /* PathFinder.cpp in Sources */,
+				808F26B01CDA340000FE440C /* NavMesh.cpp in Sources */,
 				80574F1C1CDC552B0017188A /* GameObject.cpp in Sources */,
 				80574F191CDC53810017188A /* Event.cpp in Sources */,
 				80241EC51CD8C4E60055B94F /* Renderer.cpp in Sources */,

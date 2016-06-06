@@ -1,65 +1,156 @@
-//
-//  GameObject.hpp
-//  Adventure
-//
-//  Created by Rob Dawson on 06/05/2016.
-//
-//
 
 #ifndef GameObject_hpp
 #define GameObject_hpp
 
 #include <stdio.h>
-#include "Renderer.hpp"
+#include "Math.hpp"
+#include "Event.hpp"
 
+using namespace gmath;
 using namespace ci;
 using namespace std;
 
 
-class GameObject{
+class Component{
   public:
-    vec2 getPos(){ return pos; }
-    virtual void draw( GameRenderer * renderer ) = 0;
-  protected:
+    static unsigned long bits(){ return 0x0; }
+};
+
+class GameObject{
+    
+public:
+    GameObject(string a){ name = a; }
+    unsigned long componentBits = 0x0;
+    
+    template<class T>
+    void addAComponent( T c ){
+        components[ &typeid(*c) ] = c;
+        componentBits += c->bits();
+    }
+    
+    template <typename T>
+    T* getComponent(){
+        // cout << "GETTING: " << &typeid(T) << "\n";
+        if(components.count(&typeid(T)) != 0){
+            return static_cast<T*>(components[&typeid(T)]);
+        } else {
+            // return NullComponent;
+            cout << "component don't exist yo" << "\n";
+            return nullptr;
+        }
+    }
+    
+    template <typename T>
+    void removeComponent(){
+        if(components.count(&typeid(T)) != 0){
+            components.erase( &typeid(T) );
+            componentBits -= T::bits();
+        } else {
+            cout << "no component to erase" << "\n";
+        }
+    }
+    
+    
+    string getName(){ return name; }
+    int noOfComponents(){ return components.size(); };
+    
+private:
+    unordered_map< const type_info* , Component * > components;
+    string name;
+};
+
+class ItemComponent : public Component{
+public:
+    static unsigned long bits(){ return 0x100; }
+};
+
+class HoverableComponent : public Component {
+  public:
+    HoverableComponent( string ht ){
+        hoverText = ht;
+    }
+    string hoverText;
+    static unsigned long bits(){ return 0x80; }
+};
+
+class PlayerComponent : public Component{
+  public:
+    static unsigned long bits(){ return 0x40; }
+};
+
+class RouteFollowerComponent : public Component{
+  public:
+    RouteFollowerComponent(){}
+    void setRoute( vector<vec2> r, GameEvent * e ){
+        route = r;
+        routeIndex = 0;
+        plannedEvent = e;
+    }
+    static unsigned long bits(){ return 0x20; }
+//private:
+    vector<vec2> route = vector<vec2>(0);
+    GameEvent * plannedEvent;
+    int routeIndex = 0;
+};
+
+class DirectionComponent : public Component{
+  public:
+    DirectionComponent(){
+        direction = "down";
+    }
+    string direction = "down";
+    static unsigned long bits(){ return 0x4; }
+};
+
+class SpriteComponent : public Component{
+  public:
+    SpriteComponent(){}
+    SpriteComponent(string a, vec2 dof){
+        filename = a;
+        drawOffset = dof;
+    }
+    string filename;
+    vec2 drawOffset;
+    string getFileName(){ return filename; }
+    static unsigned long bits(){ return 0x2; }
+};
+
+
+class PositionComponent : public Component{
+  public:
+    PositionComponent(){}
+    PositionComponent(vec2 a){ pos = a; }
+    vec2 getPos(){ return pos; };
+    void setPos( vec2 a ){ pos = a; };
+    static unsigned long bits(){ return 0x1; }
+  private:
     vec2 pos;
 };
 
-class Interactable : public GameObject {
-  public:
-    Interactable(){};
-    Interactable( string n, vec2 p, vec2 dof, vec2 wtp, int w, int h ){
-        pos = p;
-        name = n;
+
+class RectComponent : public Component{
+public:
+    RectComponent();
+    RectComponent( int w, int h ){
         width = w;
         height = h;
-        drawOffset = dof;
-        walkToOffset = wtp;
     }
-    int width;
-    int height;
-    vec2 drawOffset = vec2(0,0);
-    vec2 walkToOffset = vec2(0,0);
-    string name;
-    vec2 getWalkToPos(){
-        return pos + walkToOffset;
-    }
-    bool inRect( vec2 mousepos ){
-        return mousepos.x > pos.x - width/2 && mousepos.x < pos.x + width/2 && mousepos.y > pos.y - height/2 && mousepos.y < pos.y + height/2;
-    }
-    bool mouseOver( vec2 mousepos ){
-        return inRect( mousepos );
-    }
-    bool mouseDown( vec2 mousepos ){
-        return inRect( mousepos );
-    }
-    void draw( GameRenderer * renderer ){
-        renderer->drawItem( pos, drawOffset, walkToOffset, name );
-    }
+    int width, height;
+    static unsigned long bits(){ return 0x8; }
 };
 
-class Item : public Interactable {
-    
+
+class InteractableComponent : public Component{
+  public:
+    InteractableComponent();
+    InteractableComponent( vec2 wtp ){
+        walkToOffset = wtp;
+    }
+    vec2 walkToOffset = vec2(0,0);
+    static unsigned long bits(){ return 0x10; }
 };
+
+
 
 
 #endif /* GameObject_hpp */

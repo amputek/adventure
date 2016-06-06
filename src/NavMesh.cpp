@@ -1,22 +1,19 @@
 #include <stdio.h>
 #include <queue>
 #include "Math.hpp"
-#include "Renderer.hpp"
-#include "Event.hpp"
 
 using namespace ci;
 using namespace std;
-using namespace math;
+using namespace gmath;
 
 class Graph{
-private:
+  private:
     int numberOfVertices;
     list<int> *connections;
     string DFSUtil(int v, int target, bool visited[], string pathSoFar){
         visited[v] = true;
         if( v == target ) return pathSoFar + to_string(v);
         
-        // Recur for all the vertices adjacent to this vertex
         for (list <int>::iterator i = connections[v].begin(); i != connections[v].end(); ++i){
             if (!visited[*i]){
                 string x = pathSoFar + to_string(v);
@@ -26,21 +23,7 @@ private:
         }
         return "";
     }
-    string BFSUtil(int v, int target, bool visited[], string pathSoFar){
-        visited[v] = true;
-        if( v == target ) return pathSoFar + to_string(v);
-        
-        // Recur for all the vertices adjacent to this vertex
-        for (list <int>::iterator i = connections[v].begin(); i != connections[v].end(); ++i){
-            if (!visited[*i]){
-                string x = pathSoFar + to_string(v);
-                string p = DFSUtil(*i, target, visited, x);
-                if(p != "") return p;
-            }
-        }
-        return "";
-    }
-public:
+  public:
     Graph(int V){
         numberOfVertices = V;
         connections = new list<int>[numberOfVertices];
@@ -50,20 +33,14 @@ public:
     }
     
     vector<int> backtrace(int* parent, int start, int end){
-//        cout << "ROUTE: " << start << " to " << end << "\n";
         int i = end;
         vector<int> route;
         route.push_back(end);
         while( i != start ){
-//            cout << i << ":" << parent[i] << "\n";
             i = parent[i];
-//            route = to_string(i) + route;
             route.push_back( i );
         }
-//        cout << route;
-//        cout << "\n";
         return route;
-
     };
     
     vector<int> BFS(int startIndex, int targetIndex ){
@@ -71,20 +48,10 @@ public:
         bool* visited = new bool[numberOfVertices];
         int* parent = new int[numberOfVertices];
         for (int i = 0; i < numberOfVertices; i++) visited[i] = false;
-        
-//        for (int n = 0; n < numberOfVertices; n++){
-//            cout << n << " : ";
-//            for (list<int>::iterator i = connections[n].begin(); i != connections[n].end(); i++){
-//                cout << *i;
-//            }
-//            cout << "\n";
-//        }
 
         queue<int> q;
         q.push( startIndex );
         visited[ startIndex ] = true;
-        
-//        list<int>::iterator i;
         
         while(!q.empty()){
             
@@ -107,16 +74,12 @@ public:
     string DFS(int startIndex, int targetIndex ){
         bool *visited = new bool[numberOfVertices];
         for (int i = 0; i < numberOfVertices; i++) visited[i] = false;
-
         return DFSUtil( startIndex, targetIndex, visited, "");
     }
 };
 
-class Hoverable{
 
-};
-
-class Node : public Hoverable{
+class Node {
 public:
     Node(){}
     Node( vec2 p, int n ){
@@ -129,8 +92,8 @@ public:
 };
 
 
-class NavPolygon : public Hoverable {
-public:
+class NavPolygon {
+  public:
     NavPolygon(){}
     NavPolygon( vector<vec2> p ){
         points = p;
@@ -165,10 +128,11 @@ public:
 
 
 class NavMesh{
-public:
+  public:
     vector<NavPolygon> polys;
     vector<Node*> nodes;
-    Hoverable * selected;
+    vector< vector<vec2> > shapes;
+    vector<vec2> points;
     NavMesh(){}
     bool edgesAreSame( vec2 a1, vec2 a2, vec2 b1, vec2 b2 ){
         if( a1 == b1 && a2 == b2 ) return true;
@@ -182,6 +146,8 @@ public:
             Node * centerNode = new Node(polys[i].getCenterPos(), nodes.size());
             nodes.push_back( centerNode );
             polys[i].centerRef = centerNode;
+            
+            shapes.push_back( polys[i].points );
         }
         
         for( int i = 0; i < polys.size(); i++ ){
@@ -220,6 +186,10 @@ public:
                 }
             }
         }
+        
+        for(int i = 0; i < nodes.size(); i++){
+            points.push_back( nodes[i]->pos );
+        }
     }
     
     NavPolygon * insidePoly( vec2 a ){
@@ -231,20 +201,11 @@ public:
         return nullptr;
     }
     
-    void draw( GameRenderer * renderer ){
-        for(int i = 0; i < polys.size(); i++){
-            renderer->drawNavPoly( polys[i].points, selected == static_cast<Hoverable*>(&polys[i]) );
-        }
-        for(int i = 0; i < nodes.size(); i++){
-            vector<vec2> neighbours;
-            for(int n = 0; n < nodes[i]->neighbours.size(); n++){
-                neighbours.push_back( nodes[i]->neighbours[n]->pos );
-            }
-            renderer->drawNode( nodes[i]->pos, nodes[i]->name, selected == static_cast<Hoverable*>(nodes[i]), neighbours );
-        }
+    bool pointInsideNavMesh( vec2 a ){
+        return insidePoly(a) != nullptr;
     }
     
-    vector<vec2> moveTo( vec2 atarget, vec2 playerpos ){
+    vector<vec2> generateRoute( vec2 atarget, vec2 playerpos ){
         
         if( distance( atarget, playerpos ) < 10.0f ){
             vector<vec2> a(0);
@@ -289,7 +250,6 @@ public:
             vector<vec2> currentRoute;
             currentRoute.push_back( playerpos );
             for (int i = route.size()-2; i > 0; i--) {
-//                cout << route[i];
                 Node * a = nodes[ route[i] ];
                 currentRoute.push_back( a->pos );
             }
@@ -302,87 +262,4 @@ public:
         return a;
     }
     
-    void mouseOver( vec2 mp ){
-        
-        bool somethingSelected = false;
-        
-        for(int i = 0; i < nodes.size(); i++){
-            if( !somethingSelected ){
-                if( distance( nodes[i]->pos, mp ) < 10 ){
-                    Hoverable * h = nodes[i];
-                    selected = h;
-                    somethingSelected = true;
-                }
-            }
-        }
-        if( !somethingSelected ){
-            NavPolygon * polyIndex = insidePoly( mp );
-            if( polyIndex != NULL ){
-                Hoverable * h = polyIndex;
-                selected = h;
-                somethingSelected = polyIndex;
-                
-            }
-        }
-        
-        if( !somethingSelected ) selected = nullptr;
-//        if( somethingSelected ) cout << "newsly selected" << selected << "\n";
-    }
 };
-
-class Route {
-  public:
-    Route( vector<vec2> r ){
-        route = r;
-    }
-    vec2 getTarget( vec2 currentPos ){
-        if( route.size() > 1 ){
-            if( distance( currentPos, route[routeIndex] ) < 5.0f ){
-                if( routeIndex < route.size() - 1){
-                    routeIndex++;
-                    return route[routeIndex];
-                } else {
-                    route.clear();
-                    event->trigger();
-                    return vec2(-1,-1);
-                }
-            }
-            return route[routeIndex];
-        }
-        return vec2(-1,-1);
-    }
-    void setup( vector<vec2> r, GameEvent * e ){
-        route = r;
-        routeIndex = 0;
-        event = e;
-    }
-    vector<vec2> getVec2s(){
-        return route;
-    }
-  private:
-    vector<vec2> route;
-    int routeIndex = 0;
-    GameEvent * event;
-};
-
-
-//this class is kinda pointless... make it part of navmesh?
-class PathFinder{
-  public:
-    PathFinder(){}
-    PathFinder( NavMesh * nm ){
-        navMesh = nm;
-    }
-    NavMesh * navMesh;
-    void setRoute( Route * aRoute, vec2 target, vec2 start, GameEvent * event ){
-        vector<vec2> r = navMesh->moveTo( target, start );
-        if(r.size() > 1 ) aRoute->setup( r, event );
-    }
-    void mouseOver( vec2 mousepos ){
-        navMesh->mouseOver( mousepos );
-    }
-    void draw( GameRenderer * renderer ){
-        navMesh->draw(renderer);
-    }
-};
-

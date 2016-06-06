@@ -13,9 +13,10 @@ using namespace ci;
 using namespace std;
 
 
-namespace math {
+namespace gmath {
     extern float distance(vec2 a, vec2 b);
     extern float getAngle(vec2 a, vec2 b);
+    extern bitset<12> printBits( long x );
 }
 
 namespace debug {

@@ -1,55 +1,15 @@
 #include "cinder/app/App.h"
 #include "cinder/app/RendererGl.h"
 #include "cinder/gl/gl.h"
+
 #include "Math.hpp"
 #include "Renderer.hpp"
-#include "PathFinder.cpp"
-#include "GameObject.hpp"
+#include "System.hpp"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
-using namespace math;
-
-class Player : public GameObject{
-  public:
-    Player(){
-        pos = vec2(170,260);
-        currentRoute = new Route( vector<vec2>(0) );
-    };
-    Route * currentRoute;
-    void update(){
-        vec2 target = currentRoute->getTarget( pos );
-        if( target == vec2(-1,-1) ){
-            
-        } else {
-            float dir = atan2( target.y - pos.y, target.x - pos.x );
-            vec2 beep = vec2( cos(dir), sin(dir) );
-            pos += beep * 2.0f;
-            direction = getDir( beep );
-        }
-    }
-    void setRoute( vector<vec2> r, GameEvent * e ){
-//        currentRoute->setup( r, event );
-    }
-    void draw( GameRenderer * renderer ){
-        renderer->drawPlayer( pos, direction );
-        renderer->drawRoute( currentRoute->getVec2s() );
-    }
-    string getDir( vec2 d ){
-        float right = distance(vec2(1,0),d);
-        float left = distance(vec2(-1,0),d);
-        float up = distance(vec2(0, -1),d);
-        float down = distance(vec2(0, 1),d);
-        double smallest = min( min(up, down), min(left, right));
-        if( smallest == right ) return "right";
-        if( smallest == up ) return "up";
-        if( smallest == left ) return "left";
-        if( smallest == down ) return "down";
-        return "down";
-    }
-    string direction = "down";
-};
+using namespace gmath;
 
 class AdventureApp : public App {
   public:
@@ -58,39 +18,80 @@ class AdventureApp : public App {
     void mouseMove( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
-    GameRenderer * renderer;
     
-    Player player;
-    PathFinder pathFinder;
+    RenderSystem * renderer;
+
+    vector<GameObject*> gameObjects;
+    GameObject * player;
     
-    Interactable ropeItem;
-    Interactable stairs;
-    Interactable fingers;
+    NavMesh * navMesh;
     
-    vector<GameObject*> drawers;
-    vector<GameObject*> sortedDrawers;
     
 };
 
+
+string HoverSystem::hovered;
+vector<GameObject*> InventorySystem::inventoryItems;
+
 void AdventureApp::setup(){
     setWindowSize( 800, 600 );
+    setWindowPos( 600, 0 );
     
     gl::enable( GL_LINE_SMOOTH );
     glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
     gl::enableAlphaBlending();
     
-    renderer = new GameRenderer();
-    player = * new Player();
-    
-    ropeItem = * new Interactable( "rope"      , vec2(142, 416), vec2(25,10), vec2(0,0), 50, 20 );
-    stairs   = * new Interactable( "stairhead" , vec2(510, 335), vec2(40,220), vec2(-20,30), 120, 240 );
-    fingers  = * new Interactable( "fingers"   , vec2(420, 329), vec2(40,90), vec2(0,0), 120, 240 );
+    renderer = new RenderSystem();
+
+//    Switcher * fingers  = new Switcher( "fingers"   , vec2(420, 329), vec2(40,90) , vec2(-20,20), 100, 107 );
     
     
-    drawers.push_back( &ropeItem );
-    drawers.push_back( &stairs );
-    drawers.push_back( &player );
-    drawers.push_back( &fingers );
+    player = new GameObject("player");
+    player->addAComponent( new PositionComponent( vec2(170,260) ) );
+    player->addAComponent( new SpriteComponent("dude", vec2(31,90)) );
+    player->addAComponent( new RouteFollowerComponent() );
+    player->addAComponent( new DirectionComponent() );
+    player->addAComponent( new PlayerComponent() );
+    player->addAComponent( new HoverableComponent( "player" ) );
+    player->addAComponent( new RectComponent(61,100) );
+    
+    GameObject * ropeItem = new GameObject("rope");
+    ropeItem->addAComponent( new PositionComponent( vec2(142, 416) ) );
+    ropeItem->addAComponent( new RectComponent(  50, 20 ) );
+    ropeItem->addAComponent( new InteractableComponent( vec2(25,10) ) );
+    ropeItem->addAComponent( new SpriteComponent( "rope", vec2(25,10) ) );
+    ropeItem->addAComponent( new HoverableComponent( "pick up rope" ) );
+    ropeItem->addAComponent( new ItemComponent() );
+    
+    GameObject * stairs = new GameObject("stairs");
+    stairs->addAComponent( new PositionComponent( vec2(510, 335) ) );
+    stairs->addAComponent( new InteractableComponent( vec2(-20,30) ) );
+    stairs->addAComponent( new SpriteComponent( "stairhead", vec2(40,220) ) );
+    stairs->addAComponent( new RectComponent( 120, 240 ) );
+    stairs->addAComponent( new HoverableComponent( "talk to face" ) );
+
+
+    cout << "pos: " << printBits( PositionComponent::bits() ) << "\n";
+    cout << "spr: " << printBits( SpriteComponent::bits() ) << "\n";
+    cout << "dir: " << printBits( DirectionComponent::bits() ) << "\n";
+    cout << "rec: " << printBits( RectComponent::bits() ) << "\n";
+    cout << "int: " << printBits( InteractableComponent::bits() ) << "\n";
+    cout << "rfo: " << printBits( RouteFollowerComponent::bits() ) << "\n";
+    cout << "pla: " << printBits( PlayerComponent::bits() ) << "\n";
+    cout << "hov: " << printBits( HoverableComponent::bits() ) << "\n";
+    cout << "-----" << "\n";
+    cout << "PLA: " << printBits( player->componentBits ) << " " << player->noOfComponents() << "\n";
+    cout << "STA: " << printBits( stairs->componentBits ) << "\n";
+    cout << "ROP: " << printBits( ropeItem->componentBits ) << "\n";
+    
+    player->removeComponent<RectComponent>();
+    
+    cout << "PLA: " << printBits( player->componentBits ) << " " << player->noOfComponents() << "\n";
+    
+    gameObjects.push_back( stairs );
+    gameObjects.push_back( ropeItem );
+    gameObjects.push_back( player );
+
     
     vector<NavPolygon> ps;
     
@@ -148,79 +149,34 @@ void AdventureApp::setup(){
     p7.push_back( vec2(  572.000,  398.000) );
     p7.push_back( vec2(  473.000,  415.000) ); //here
     p7.push_back( vec2(  481.000,  351.000) );
-    
     ps.push_back( *new NavPolygon( p7 ) );
     
-    NavMesh * navMesh = new NavMesh( ps );
-    pathFinder = *new PathFinder( navMesh );
+    navMesh = new NavMesh( ps );
     
 }
 
 void AdventureApp::mouseMove( MouseEvent event ){
-//    vec2 mousepos = vec2(event.getX(), event.getY() );
-    
-//    if( ropeItem.mouseOver( mousepos ) ){
-//        
-//    } else if( stairs.mouseOver( mousepos ) ){
-//        
-//    } else {
-//        
-//    }
+    vec2 mousepos = event.getPos();
+    HoverSystem::update( gameObjects, navMesh, mousepos );
 }
 
 void AdventureApp::mouseDown( MouseEvent event ){
     vec2 mousepos = vec2(event.getX(), event.getY() );
-    cout << mousepos << "\n";
+    cout << "Mouse Click: " << mousepos << "\n";
     
-//    for( int i = 0; i < interactables.size(); i++ ){
-//        Interactable * in = interactables[i];
-//        pathFinder.setRoute( player.currentRoute, in->getWalkToPos(), player.getPos(), new EmptyEvent()  );
-//    }
-//
-    if( stairs.mouseDown( mousepos ) ){
-        pathFinder.setRoute( player.currentRoute, stairs.getWalkToPos(), player.getPos(), new EmptyEvent()  );
-    } else if( ropeItem.mouseDown(mousepos) ){
-        pathFinder.setRoute( player.currentRoute, ropeItem.getWalkToPos(), player.getPos(), new PickUpItemEvent( &ropeItem ) );
-    } else {
-        pathFinder.setRoute( player.currentRoute, mousepos, player.getPos(), new EmptyEvent() );
-    }
+    PathFinderSystem::movePlayerTo( navMesh, player, gameObjects, mousepos );
 }
 
 void AdventureApp::update(){
-    player.update();
-    
-    sortedDrawers.clear();
-    sortedDrawers.empty();
-    int drawn = 0;
-    bool* d = new bool( drawers.size() );
-    for (int i = 0; i < drawers.size(); i++) d[i] = false;
-    while( drawn < drawers.size() ){
-        int toDraw = 0;
-        float maxY = 600;
-        for (int i = 0; i < drawers.size(); i++) {
-            if( !d[i] ){
-                float y = dynamic_cast<GameObject*>(drawers[i])->getPos().y;
-                if( y < maxY ){
-                    maxY = y;
-                    toDraw = i;
-                }
-            }
-        }
-        drawn++;
-        d[toDraw] = true;
-        sortedDrawers.push_back( drawers[toDraw] );
-    }
+    MovementSystem::update( player );
 }
 
 void AdventureApp::draw(){
     renderer->drawBackdrop();
-    
-    for (int i = 0; i < sortedDrawers.size(); i++){
-        sortedDrawers[i]->draw( renderer );
-    }
-
-    pathFinder.draw( renderer );
-    
+    renderer->drawNavMesh( navMesh->shapes, navMesh->points );
+    renderer->drawGameObjects( gameObjects );
+    HoverSystem::draw();
+    InventorySystem::draw();
 }
 
 CINDER_APP( AdventureApp, RendererGl )
